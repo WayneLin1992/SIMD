@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
     printf("\n %.5f", ((double)end.tv_nsec + 1.0e-9*end.tv_nsec) -((double)start.tv_nsec + 1.0e-9*start.tv_nsec));
     struct timespec tstart = {0,0}, tend = {0,0};
     clock_gettime(CLOCK_MONOTONIC, &tstart);
-    int arr[4] = {40, 40, 40, 40};
+    int arr[4] = {10,20,30,40};
     int arr1[4] = {5, 5, 5, 5};
     int tot[4] = {0};
     for(int i = 0; i < 4; i++){
