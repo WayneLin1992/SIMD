@@ -23,7 +23,7 @@ implement memcpy neon
 30 
 40
 ```
-`gcc -o memcpy_neon memcpy_neon.c`
+testbench `gcc -o memcpy_neon memcpy_neon.c`
 ```shell
 benchmark(size=16 bytes, times=4096):
 result(dst aligned, src aligned): memcpy_fast=137723.00014ms memcpy=77629.00008 ms
