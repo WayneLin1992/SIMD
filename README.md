@@ -11,6 +11,6 @@ raspberry pi4(aarch64)(ubuntu 22.0)
 `gcc -o neon NEON.c`
 ```shell
 15 25 35 45 
-111.00000
-223.00000
+278.00000
+408.00000
 ```
