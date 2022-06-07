@@ -18,10 +18,8 @@ raspberry pi4(aarch64)(ubuntu 22.0)
 implement memcpy neon
 `gcc -o memcpy memcpy.c`
 ```shell
-10 
-20 
-30 
-40
+memcpy_neon_32x4=260.00000ms memcpy=55.00000 ms
+memcpy_neon_32x4x4=518.00000ms memcpy=111.00000 ms
 ```
 testbench `gcc -o memcpy_neon memcpy_neon.c`
 ```shell
