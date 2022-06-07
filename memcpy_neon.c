@@ -6,22 +6,29 @@
 #include <assert.h>
 #include <arm_neon.h>
 
-void* memcpy_fast(void* dst, void* src){
+void memcpy_neon_16(void* dst, void* src){
     int32x4_t m0 = vld1q_s32((int32_t*) src);
     vst1q_s32((int32_t *)dst, m0);
-    return (void*)dst;
+}
+
+void memcpy_fast(void* dst, void* src, size_t size){
+    switch(size){
+    	case 16: 
+    	    memcpy_neon_16(dst, src); 
+    	    break;
+    }    
 }
 
 void benchmark(int dstalign, int srcalign, size_t size, int times)
 {
-	char *DATA1 = (char*)malloc(size + 32);
-	char *DATA2 = (char*)malloc(size + 32);
-	size_t LINEAR1 = ((size_t)DATA1);
-	size_t LINEAR2 = ((size_t)DATA2);
-	char *ALIGN1 = (char*)(((32 - (LINEAR1 & 31)) & 31) + LINEAR1);
-	char *ALIGN2 = (char*)(((32 - (LINEAR2 & 31)) & 31) + LINEAR2);
-	char *dst = (dstalign)? ALIGN1 : (ALIGN1 + 1);
-	char *src = (srcalign)? ALIGN2 : (ALIGN2 + 3);
+	int *DATA1 = malloc(size + 16);
+	int *DATA2 = malloc(size + 16);
+	srand(time(NULL));
+	for(int i = 0; i < (size/4); i++){
+	    DATA1[i] = rand() % 100;
+	}
+	int *dst = (dstalign)? DATA1 : (DATA1 + 1);
+	int *src = (srcalign)? DATA2 : (DATA2 + 3);
 	//unsigned int t1, t2;
 	int k;
 	struct timespec start = {0,0}, end = {0,0};
@@ -37,7 +44,7 @@ void benchmark(int dstalign, int srcalign, size_t size, int times)
 	sleep(100);
 	clock_gettime(CLOCK_MONOTONIC, &tstart);
 	for (k = times; k > 0; k--) {
-		memcpy_fast(dst, src);
+		memcpy_fast(dst, src, size);
 	}
 	clock_gettime(CLOCK_MONOTONIC, &tend);
 	double t2 = ((double)tend.tv_nsec + 1.0e-9*tend.tv_nsec) -((double)tstart.tv_nsec + 1.0e-9*tstart.tv_nsec);
@@ -63,7 +70,7 @@ void bench(int copysize, int times)
 
 int main(void)
 {
-	bench(16, 0x1000);
+	bench(16, 0x100);
 
 
 	return 0;
