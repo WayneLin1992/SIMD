@@ -6,17 +6,25 @@
 #include <assert.h>
 #include <arm_neon.h>
 
-void memcpy_neon_16(void* dst, void* src){
+void memcpy_neon_32x4(void* dst, void* src){
     int32x4_t m0 = vld1q_s32((int32_t*) src);
     vst1q_s32((int32_t *)dst, m0);
 }
 
+void memcpy_neon_32x4x4(void* dst, void* src){
+    int32x4x4_t m0 = vld4q_s32((int32_t*) src);
+    vst4q_s32((int32_t *)dst, m0);
+}
+
 void memcpy_fast(void* dst, void* src, size_t size){
     switch(size){
-    	case 16: 
-    	    memcpy_neon_16(dst, src); 
+    	case 16:
+    	    memcpy_neon_32x4(dst, src);
     	    break;
-    }    
+        case 64:
+            memcpy_neon_32x4x4(dst, src);
+            break;
+    }
 }
 
 void benchmark(int dstalign, int srcalign, size_t size, int times)
@@ -71,6 +79,7 @@ void bench(int copysize, int times)
 int main(void)
 {
 	bench(16, 0x100);
+	bench(64, 0x100);
 
 
 	return 0;
