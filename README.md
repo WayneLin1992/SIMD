@@ -14,3 +14,9 @@ raspberry pi4(aarch64)(ubuntu 22.0)
 278.00000
 408.00000
 ```
+
+
+```shell
+benchmark(size=16 bytes, times=4096):
+result(dst aligned, src aligned): memcpy_fast=137723.00014ms memcpy=77629.00008 ms
+```
