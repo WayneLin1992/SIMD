@@ -20,3 +20,11 @@ raspberry pi4(aarch64)(ubuntu 22.0)
 benchmark(size=16 bytes, times=4096):
 result(dst aligned, src aligned): memcpy_fast=137723.00014ms memcpy=77629.00008 ms
 ```
+implement memcpy neon
+`gcc -o memcpy memcpy.c`
+```shell
+10 
+20 
+30 
+40
+```
