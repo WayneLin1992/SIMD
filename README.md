@@ -10,7 +10,7 @@ amd ryzen 7 pro 4950U(x86_64)(ubuntu 20.04)
 raspberry pi4(aarch64)(ubuntu 22.0)
 `gcc -o neon NEON.c`
 ```shell
-45 45 45 45 
-185.00000
-389.00000
+15 25 35 45 
+111.00000
+223.00000
 ```
