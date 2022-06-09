@@ -1,5 +1,6 @@
-#include <immintrin.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include <arm_neon.h>
 #include <string.h>
 
@@ -18,7 +19,7 @@ int main(){
     memset(ptr, 0, 256);
     uint8_t *p = ptr;
     clock_gettime(CLOCK_MONOTONIC, &tstart);
-     _uint8x16_t m0 =  vdupq_n_u8('a');
+    uint8x16_t m0 =  vdupq_n_u8('a');
     uint8x16x2_t first = vuzpq_u8(m0, m0);
     for(int i = 0; i < 8; i++){
         vst2q_u8((uint8_t*)p, first);
