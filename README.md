@@ -33,3 +33,10 @@ implement memset mavx2
 memset : 120.00000
 memset_mavx2 : 71.00000
 ```
+
+implement memset neon
+`gcc -o memset_neon memset_neon.c`
+```shell
+memset : 93.00000
+memset_neon : 555.00000
+```
