@@ -26,3 +26,10 @@ testbench `gcc -o memcpy_neon memcpy_neon.c`
 benchmark(size=16 bytes, times=4096):
 result(dst aligned, src aligned): memcpy_fast=137723.00014ms memcpy=77629.00008 ms
 ```
+
+implement memset mavx2
+`gcc -o memset_avx2 memset_avx2.c -mavx2 `
+```shell
+memset : 120.00000
+memset_mavx2 : 71.00000
+```
