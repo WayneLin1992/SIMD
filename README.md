@@ -23,8 +23,23 @@ memcpy_neon_32x4x4=518.00000ms memcpy=111.00000 ms
 ```
 testbench `gcc -o memcpy_neon memcpy_neon.c`
 ```shell
-benchmark(size=16 bytes, times=4096):
-result(dst aligned, src aligned): memcpy_fast=137723.00014ms memcpy=77629.00008 ms
+benchmark(size=16 bytes, times=256):
+result(dst aligned, src aligned): memcpy_fast=8685.00001ms memcpy=2852.00000 ms
+
+benchmark(size=64 bytes, times=256):
+result(dst aligned, src aligned): memcpy_fast=33851.00003ms memcpy=2889.00000 ms
+
+benchmark(size=256 bytes, times=256):
+result(dst aligned, src aligned): memcpy_fast=147886.00015ms memcpy=7851.00001 ms
+
+benchmark(size=1024 bytes, times=256):
+result(dst aligned, src aligned): memcpy_fast=311883.00031ms memcpy=25092.00003 ms
+
+benchmark(size=4096 bytes, times=256):
+result(dst aligned, src aligned): memcpy_fast=1195790.00120ms memcpy=98628.00010 ms
+
+benchmark(size=524288 bytes, times=256):
+result(dst aligned, src aligned): memcpy_fast=29718810.02972ms memcpy=42115961.04212 ms
 ```
 
 implement memset mavx2
