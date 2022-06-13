@@ -16,6 +16,41 @@ void memcpy_neon_32x4x4(void* dst, void* src){
     vst4q_s32((int32_t *)dst, m0);
 }
 
+void memcpy_neon_32x4x4x4(void* dst, void* src){
+    //__builtin_prefetch(src);
+    int32x4x4_t m0, m1, m2, m3;
+    m0 = vld4q_s32(((int32_t*) src) + 0);
+    m1 = vld4q_s32(((int32_t*) src) + 1);
+    m2 = vld4q_s32(((int32_t*) src) + 2);
+    m3 = vld4q_s32(((int32_t*) src) + 3);
+    vst4q_s32((((int32_t *)dst) + 0), m0);
+    vst4q_s32((((int32_t *)dst) + 1), m1);
+    vst4q_s32((((int32_t *)dst) + 2), m2);
+    vst4q_s32((((int32_t *)dst) + 3), m3);
+}
+
+void memcpy_neon_32x4x4x4x2(void* dst, void* src){
+    __builtin_prefetch(src);
+    int32x4x4_t m0, m1, m2, m3, m4, m5, m6, m7;
+    m0 = vld4q_s32(((int32_t*) src) + 0);
+    m1 = vld4q_s32(((int32_t*) src) + 1);
+    m2 = vld4q_s32(((int32_t*) src) + 2);
+    m3 = vld4q_s32(((int32_t*) src) + 3);
+    m4 = vld4q_s32(((int32_t*) src) + 4);
+    m5 = vld4q_s32(((int32_t*) src) + 5);
+    m6 = vld4q_s32(((int32_t*) src) + 6);
+    m7 = vld4q_s32(((int32_t*) src) + 7);
+    vst4q_s32((((int32_t *)dst) + 0), m0);
+    vst4q_s32((((int32_t *)dst) + 1), m1);
+    vst4q_s32((((int32_t *)dst) + 2), m2);
+    vst4q_s32((((int32_t *)dst) + 3), m3);
+    vst4q_s32((((int32_t *)dst) + 4), m4);
+    vst4q_s32((((int32_t *)dst) + 5), m5);
+    vst4q_s32((((int32_t *)dst) + 6), m6);
+    vst4q_s32((((int32_t *)dst) + 7), m7);
+    	
+}
+
 void memcpy_fast(void* dst, void* src, size_t size){
     switch(size){
     	case 16:
@@ -24,6 +59,21 @@ void memcpy_fast(void* dst, void* src, size_t size){
         case 64:
             memcpy_neon_32x4x4(dst, src);
             break;
+       	case 256:
+       	    memcpy_neon_32x4x4x4(dst, src);
+       	    break;
+       	case 1024:
+       	    memcpy_neon_32x4x4x4x2(dst,src);
+       	    break;
+       	case 4096:
+       	   for(int i = 0; i < 4; i++){
+       	       memcpy_neon_32x4x4x4x2(dst + i,src + i);
+       	   }
+       	   break;
+       default:
+           for(int i = 0; i < (size/4096); i++){
+       	       memcpy_neon_32x4x4x4x2(dst + i,src + i);
+       	   }
     }
 }
 
@@ -42,14 +92,14 @@ void benchmark(int dstalign, int srcalign, size_t size, int times)
 	struct timespec start = {0,0}, end = {0,0};
 	struct timespec tstart = {0,0}, tend = {0,0};
 
-	sleep(100);
+	//sleep(100);
     	clock_gettime(CLOCK_MONOTONIC, &start);
 	for (k = times; k > 0; k--) {
 		memcpy(dst, src, size);
 	}
 	clock_gettime(CLOCK_MONOTONIC, &end);
 	double t1 = ((double)end.tv_nsec + 1.0e-9*end.tv_nsec) -((double)start.tv_nsec + 1.0e-9*start.tv_nsec);
-	sleep(100);
+	//sleep(100);
 	clock_gettime(CLOCK_MONOTONIC, &tstart);
 	for (k = times; k > 0; k--) {
 		memcpy_fast(dst, src, size);
@@ -80,7 +130,9 @@ int main(void)
 {
 	bench(16, 0x100);
 	bench(64, 0x100);
-
-
+	bench(256, 0x100);
+	bench(1024, 0x100);
+	bench(4096, 0x100);
+	bench(1024 * 512, 0x100);
 	return 0;
 }
